@@ -1,0 +1,45 @@
+name: Build APK
+
+on:
+  workflow_dispatch:          # زر "Run workflow" من تبويب Actions
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install Flet
+        run: pip install flet==0.28.3
+
+      # مفتاح توقيع ثابت: هو الشرط لأن أندرويد يقبل التحديث فوق النسخة المنصّبة بدون مسح البيانات.
+      # (يُكتب خارج مجلد التطبيق حتى لا ينحط داخل الـAPK). لا تغيّر هذا المفتاح أبداً بعد أول تنصيب.
+      - name: Write signing key
+        run: echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/masarif-release.jks"
+        env:
+          KEYSTORE_B64: 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
+
+      # رقم البناء يزيد تلقائياً مع كل تشغيل (أندرويد يرفض نسخة برقم أقل).
+      - name: Build APK
+        run: >
+          flet build apk -v
+          --build-number ${{ github.run_number }}
+          --android-signing-key-store "$RUNNER_TEMP/masarif-release.jks"
+          --android-signing-key-store-password fac15b69a362c897f997
+          --android-signing-key-password fac15b69a362c897f997
+          --android-signing-key-alias masarif
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: masarif-apk
+          path: build/apk/*.apk
