@@ -1,0 +1,21 @@
+[project]
+name = "masarif"
+version = "0.1.0"
+description = "مصاريفي - تطبيق المصاريف الشخصية"
+requires-python = ">=3.10"
+dependencies = ["flet==0.28.3", "reportlab>=4.0"]
+
+[tool.flet]
+product = "مصاريفي"
+org = "com.masarif"
+
+[tool.flet.app]
+path = "."
+
+[tool.flet.android]
+min_sdk_version = 24
+
+# "All files access": lets the app write backups / PDFs straight into Download/Masarif (must be switched on once
+# by the user: Settings > Apps > مصاريفي > Permissions > Files and media > Allow management of all files).
+[tool.flet.android.permission]
+"android.permission.MANAGE_EXTERNAL_STORAGE" = true
